@@ -5,4 +5,6 @@ class API {
   static String get register => '/api/auth/register'; 
   static String get posts => '/api/posts'; 
   static String get postsReact => '/api/posts/react';
+  static String get comments => '/api/comments';
+  static String get commentsReact => '/api/comments/react';
 }
