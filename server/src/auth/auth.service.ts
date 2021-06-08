@@ -3,12 +3,11 @@ import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcryptjs';
 import { UserService } from 'src/user/user.service';
 import { User } from 'src/user/user.entity';
+import { RegisterDto } from './dto/register.dto';
 import {
   USER_NOT_FOUND_ERROR,
   WRONG_PASSWORD_ERROR,
 } from './constants/auth.constants';
-import { RegisterDto } from './dto/register.dto';
-
 @Injectable()
 export class AuthService {
   constructor(
@@ -40,11 +39,11 @@ export class AuthService {
     return user;
   }
 
-  async login(phone: string) {
-    const payload = { phone };
+  async login(user: User): Promise<{ token: string; user: User }> {
+    const { phone } = user;
     return {
-      token: await this.jwtService.signAsync(payload),
-      user: await this.findUserByPhone(phone),
+      token: await this.jwtService.signAsync({ phone }),
+      user,
     };
   }
 }
