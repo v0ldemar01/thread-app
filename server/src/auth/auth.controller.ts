@@ -10,8 +10,9 @@ import {
 import { LocalAuthGuard } from './guards/local.quard';
 import { AuthService } from './auth.service';
 import { ALREADY_REGISTERED_ERROR } from './constants/auth.constants';
-import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { AuthUser } from 'src/user/user.decorator';
+import { User } from 'src/user/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -27,10 +28,10 @@ export class AuthController {
     return this.authService.createUser(newUser);
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('login')
+  @UseGuards(LocalAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async login(@Body() { phone }: LoginDto) {
-    return this.authService.login(phone);
+  async login(@AuthUser() user: User) {
+    return this.authService.login(user);
   }
 }

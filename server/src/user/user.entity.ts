@@ -31,7 +31,7 @@ export class User extends AbstractEntity {
   isActive: boolean;
 
   @RelationId((user: User) => user.image)
-  @Column()
+  @Column({ nullable: true })
   readonly imageId: string;
 
   @OneToOne(() => Image, { onDelete: 'CASCADE' })

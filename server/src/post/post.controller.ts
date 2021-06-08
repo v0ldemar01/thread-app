@@ -10,6 +10,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
+import { AuthUser } from 'src/user/user.decorator';
+import { User } from 'src/user/user.entity';
 import { POST_NOT_FOUND_ERROR } from './constants/post.constants';
 import { PostDto } from './dto/post.dto';
 import { PostService } from './post.service';
@@ -36,7 +38,7 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/')
-  async create(@Body() newPost: PostDto) {
+  async create(@Body() newPost: PostDto, @AuthUser() user: User) {
     return this.postService.create(newPost);
   }
 
