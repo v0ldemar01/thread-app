@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Post } from './post.entity';
 import { PostDto } from './dto/post.dto';
+import { IFilterDto } from './dto/filter.dto';
 
 @Injectable()
 export class PostService {
@@ -11,7 +12,9 @@ export class PostService {
     private readonly postRepository: Repository<Post>,
   ) {}
 
-  async getPosts(): Promise<Post[]> {
+  async getPosts(filter: IFilterDto): Promise<Post[]> {
+    console.log('filter', filter);
+    const { from, count, userId, include, additional } = filter;
     return this.postRepository.find();
   }
 

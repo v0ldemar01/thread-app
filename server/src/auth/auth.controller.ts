@@ -11,8 +11,8 @@ import { LocalAuthGuard } from './guards/local.quard';
 import { AuthService } from './auth.service';
 import { ALREADY_REGISTERED_ERROR } from './constants/auth.constants';
 import { RegisterDto } from './dto/register.dto';
-import { AuthUser } from 'src/user/user.decorator';
-import { User } from 'src/user/user.entity';
+import { AuthUser } from '../user/user.decorator';
+import { User } from '../user/user.entity';
 
 @Controller('auth')
 export class AuthController {

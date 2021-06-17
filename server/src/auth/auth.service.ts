@@ -1,8 +1,8 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { genSalt, hash, compare } from 'bcryptjs';
-import { UserService } from 'src/user/user.service';
-import { User } from 'src/user/user.entity';
+import { UserService } from '../user/user.service';
+import { User } from '../user/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import {
   USER_NOT_FOUND_ERROR,

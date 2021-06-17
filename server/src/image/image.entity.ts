@@ -1,4 +1,4 @@
-import { User } from 'src/user/user.entity';
+import { User } from '../user/user.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
 import { AbstractEntity } from '../data/entities/abstract.entity';
 

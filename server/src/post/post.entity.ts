@@ -8,9 +8,10 @@ import {
   RelationId,
 } from 'typeorm';
 import { AbstractEntity } from '../data/entities/abstract.entity';
-import { User } from 'src/user/user.entity';
+import { User } from '../user/user.entity';
 import { Image } from '../image/image.entity';
-import { PostReaction } from 'src/post-reaction/post-reaction.entity';
+import { Comment } from '../comment/comment.entity';
+import { PostReaction } from '../post-reaction/post-reaction.entity';
 
 @Entity()
 export class Post extends AbstractEntity {
@@ -18,7 +19,7 @@ export class Post extends AbstractEntity {
   body: string;
 
   @RelationId((post: Post) => post.image)
-  @Column()
+  @Column({ nullable: true })
   readonly imageId: string;
 
   @OneToOne(() => Image, { onDelete: 'CASCADE' })
@@ -33,6 +34,11 @@ export class Post extends AbstractEntity {
     onDelete: 'CASCADE',
   })
   user: User;
+
+  @OneToMany(() => Comment, (comment) => comment.post, {
+    cascade: true,
+  })
+  comments: Comment[];
 
   @OneToMany(() => PostReaction, (postReaction) => postReaction.post, {
     cascade: true,

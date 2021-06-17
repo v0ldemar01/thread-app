@@ -14,8 +14,9 @@ async function bootstrap() {
   );
   const configService = app.get(ConfigService);
   const PORT = configService.get<number>('PORT');
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.setGlobalPrefix('api');
   await app.listen(PORT);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 bootstrap();
