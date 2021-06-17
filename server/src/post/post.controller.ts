@@ -7,23 +7,25 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
-import { AuthUser } from 'src/user/user.decorator';
-import { User } from 'src/user/user.entity';
-import { POST_NOT_FOUND_ERROR } from './constants/post.constants';
+import { JwtAuthGuard } from '../auth/guards/jwt.guard';
+import { AuthUser } from '../user/user.decorator';
+import { User } from '../user/user.entity';
+import { IFilterDto } from './dto/filter.dto';
 import { PostDto } from './dto/post.dto';
 import { PostService } from './post.service';
+import { POST_NOT_FOUND_ERROR } from './constants/post.constants';
 
-@Controller('post')
+@Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('/')
-  async getPosts() {
-    return this.postService.getPosts();
+  async getPosts(@Query() filter: IFilterDto) {
+    return this.postService.getPosts(filter);
   }
 
   @UseGuards(JwtAuthGuard)

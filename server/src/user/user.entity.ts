@@ -12,6 +12,7 @@ import { Post } from '../post/post.entity';
 import { Comment } from '../comment/comment.entity';
 import { PostReaction } from '../post-reaction/post-reaction.entity';
 import { CommentReaction } from '../comment-reaction/comment-reaction.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -25,6 +26,7 @@ export class User extends AbstractEntity {
   phone: string;
 
   @Column()
+  @Exclude()
   password: string;
 
   @Column({ default: true })
