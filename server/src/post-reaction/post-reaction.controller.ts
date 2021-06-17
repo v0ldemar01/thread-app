@@ -11,7 +11,6 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { ICreatePostReactionDto } from './dto/create-post-reaction.dto';
 import { IReactionPostStringDto } from './dto/reaction-post-string.dto';
 import { PostReactionService } from './post-reaction.service';
-
 @Controller('post-reaction')
 export class PostReactionController {
   constructor(private readonly postReactionService: PostReactionService) {}

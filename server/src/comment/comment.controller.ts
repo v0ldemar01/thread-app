@@ -7,26 +7,30 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { CommentService } from './comment.service';
-import { CommentDto } from './dto/comment.dto';
+import { CreateCommentDto } from './dto/create-comment.dto';
 import { COMMENT_NOT_FOUND_ERROR } from './constants/comment.constants';
-
-@Controller('comment')
+import { CommentDto } from './dto/comment.dto';
+import { IFilterDto } from './dto/filter.dto';
+import { AuthUser } from 'src/user/user.decorator';
+import { User } from 'src/user/user.entity';
+@Controller('comments')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('/')
-  async getComments() {
-    return this.commentService.getComments();
+  async getComments(@Query() filter: IFilterDto) {
+    return this.commentService.getComments(filter);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getCommentById(@Param() id: string) {
+  async getCommentById(@Param('id') id: string) {
     const product = await this.commentService.getCommentById({ where: { id } });
     if (!product) {
       throw new NotFoundException(COMMENT_NOT_FOUND_ERROR);
@@ -36,8 +40,8 @@ export class CommentController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/')
-  async create(@Body() newComment: CommentDto) {
-    return this.commentService.create(newComment);
+  async create(@Body() newComment: CreateCommentDto, @AuthUser() user: User) {
+    return this.commentService.create(newComment, user);
   }
 
   @UseGuards(JwtAuthGuard)

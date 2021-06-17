@@ -1,6 +1,9 @@
-import { IsString } from 'class-validator';
+import { IsNumber } from 'class-validator';
+import { Comment } from '../comment.entity';
+export class CommentDto extends Comment {
+  @IsNumber()
+  likeCount: number;
 
-export class CommentDto {
-  @IsString()
-  body: string;
+  @IsNumber()
+  dislikeCount: number;
 }

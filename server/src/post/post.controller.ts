@@ -17,12 +17,13 @@ import { IFilterDto } from './dto/filter.dto';
 import { PostDto } from './dto/post.dto';
 import { PostService } from './post.service';
 import { POST_NOT_FOUND_ERROR } from './constants/post.constants';
+import { CreatePostDto } from './dto/create-post.dto';
 
 @Controller('posts')
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/')
   async getPosts(@Query() filter: IFilterDto) {
     return this.postService.getPosts(filter);
@@ -30,7 +31,7 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getPostById(@Param() id: string) {
+  async getPostById(@Param('id') id: string) {
     const product = await this.postService.getPostById({ where: { id } });
     if (!product) {
       throw new NotFoundException(POST_NOT_FOUND_ERROR);
@@ -40,8 +41,8 @@ export class PostController {
 
   @UseGuards(JwtAuthGuard)
   @Post('/')
-  async create(@Body() newPost: PostDto, @AuthUser() user: User) {
-    return this.postService.create(newPost);
+  async create(@Body() newPost: CreatePostDto, @AuthUser() user: User) {
+    return this.postService.create(newPost, user);
   }
 
   @UseGuards(JwtAuthGuard)

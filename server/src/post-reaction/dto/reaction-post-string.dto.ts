@@ -1,3 +1,3 @@
 export interface IReactionPostStringDto {
-  isLike: boolean;
+  isLike: string;
 }
