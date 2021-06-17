@@ -1,3 +1,3 @@
 export interface IReactionCommentStringDto {
-  isLike: boolean;
+  isLike: string;
 }

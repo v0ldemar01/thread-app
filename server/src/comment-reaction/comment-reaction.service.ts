@@ -2,28 +2,41 @@ import { DeleteResult, FindOneOptions, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommentReaction } from './comment-reaction.entity';
+import { User } from '../user/user.entity';
 import { IReactionCommentStringDto } from './dto/reaction-comment-string.dto';
 import { ICommentReactionDto } from './dto/comment-reaction.dto';
 import { ICreateCommentReactionDto } from './dto/create-comment-reaction.dto';
-
 @Injectable()
 export class CommentReactionService {
   constructor(
     @InjectRepository(CommentReaction)
     private readonly commentReactionRepository: Repository<CommentReaction>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async getReactionUsersByCommentId(
     id: string,
     { isLike }: IReactionCommentStringDto,
-  ): Promise<CommentReaction[]> {
-    const reactionFilter = isLike ? { isLike } : { isDislike: !isLike };
-    return this.commentReactionRepository.find({
-      where: {
-        postId: id,
-        ...reactionFilter,
-      },
-    });
+  ): Promise<User[]> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .andWhere((qb) => {
+        const subQuery = qb
+          .subQuery()
+          .select('comment-reaction.userId')
+          .from(CommentReaction, 'comment-reaction')
+          .where('comment-reaction.commentId = :commentId', { commentId: id })
+          .andWhere(
+            `comment-reaction.${
+              JSON.parse(isLike as string) ? 'isLike' : 'isDisLike'
+            } = :value`,
+            { value: true },
+          )
+          .getQuery();
+        return 'user.id IN ' + subQuery;
+      })
+      .getRawMany();
   }
 
   async getReactionUser(
